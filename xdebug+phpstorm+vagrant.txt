@@ -1,0 +1,30 @@
+﻿заходим по ssh в vagrant
+vagrant ssh
+
+устанавливаем xdebug
+sudo apt-get install php7.2-xdebug(или php-xdebug)
+
+Открываем файл
+sudo nano /etc/php7.2/mods-available/xdebug.ini
+
+добавляем строки:
+xdebug.remote_enable=true
+xdebug.remote_connect_back=true
+xdebug.idekey=PHPSTORM
+
+Перегружаем php-fpm
+sudo service php7.2-fpm restart
+
+далее устанавливаем расширение xdebug для chrome или firefox
+
+PhpStorm -> File -> Settings -> Server
+добавляем сервер плюсиком, выбираем имя, в поле host пишем название сайта(example.com), в выпадающем списке Debugger выбираем xdebug, ставим галку use mappings и выбираем в поле File/Directory папку с проэктом (на хост машине) и в поле Absolute path on the server вводим путь в виртуалке vagrant. Пример
+
+Absolute path				Absolute path on the server
+
+D:\www\project 				/var/www/mysite 
+
+Далее PhpStorm -> Run -> Edit Configuration
+Плюсиком добавляем "PHP Web Page" указываем имя, выбираем ранее добавленный сервер, браузер и сохраняем.
+
+Для использования нажимаем "трубку" в Шторме и кнопку в браузере(до этого в настройках дополнения выбираем тип PhpStorm с паролем PHPSTORM)

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Пример использования AJAX</title>
+        <meta charset="utf-8">
+    </head>
+    <body style='text-align:center'>
+        <h1>Загрузка веб-страницы в контейнер DIV</h1>
+        <div id='info'>Это предложение будет заменено</div>
+        <script>
+            params = "url=amazon.com/gp/aw ";//Отправляется на сервер, присваивается значение,состоящее из пары "параметр = значение".
+            request = new ajaxRequest(); // проверяет тип браузера и присваевает нужный AJAX объект(IE или др.) переменной
+            request.open("POST", "urlpost.php", true);//метод объекта принимающий аргументы в виде типа передачи инфы,
+            //длины инфы, и включения(true) или(false) отключения ассинхронной передачи данных
+
+            //Следующие 3 строки настраивают заголовки
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            request.setRequestHeader("Content-length", params.length);
+            request.setRequestHeader("Connection", "close");
+
+            //Свойство onreadystatechange Определяет функцию обработки события,
+            //вызываемую при изменении имеющегося в объекте свойства readyState
+            request.onreadystatechange = function()
+            {
+                //Свойство readyState - Целочисленное свойство, дающее представление о состоянии запроса.
+                //0 = неинициализирован, 1 = загружается, 2 = загружен, 3 = в состоянии диалога и 4 = завершен
+                if (this.readyState == 4)
+                {
+                    //Свойство status - Код статуса HTTP, возвращенный сервером
+                    if (this.status == 200)
+                    {
+                        //свойство responseText - Данные, возвращенные сервером в текстовом формате
+                        if (this.responseText != null)
+                        {
+                            document.getElementById('info').innerHTML = this.responseText;
+                        } else
+                            alert("Ошибка AJAX: Данные не получены");
+                    } else
+                        alert("Ошибка AJAX: " + this.statusText);//Текст статуса HTTP, возвращенный сервером
+                }
+            };
+            request.send(params);//Метод send() - Отправка данных серверу назначения с использованием указанного HTTP-метода
+            //Проверка типа браузера и поддержки AJAX
+            function ajaxRequest()
+            {
+                try
+                {
+                    var request = new XMLHttpRequest();
+                } catch (e1)
+                {
+                    try
+                    {
+                        request = new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch (e2)
+                    {
+                        try
+                        {
+                            request = new ActiveXObject("Microsoft.XMLHTTP");
+                        } catch (e3)
+                        {
+                            request = false;
+                        }
+                    }
+                }
+                return request;
+            }
+        </script>
+    </body>
+</html>

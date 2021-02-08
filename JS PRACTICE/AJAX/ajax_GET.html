@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Пример AJAX с GET-запросом</title>
+        <meta charset="utf-8">
+    </head>
+    <body style='text-align:center'>
+        <h1>Загрузка веб-страницы в DIV-контейнер</h1>
+        <div id='info'>Это предложение будет заменено</div>
+        <script>
+            nocache = "&nocache=" + Math.random() * 1000000;//предотвращаем кэширование страницы
+            request = new ajaxRequest();
+            request.open("GET", "urlpost.php?url=dnepr.mcomp.dp.ua" + nocache, true);
+            //Заголовки с "GET" отправлять не нужно
+            request.onreadystatechange = function()
+            {
+                if (this.readyState == 4)
+                {
+                    if (this.status == 200)
+                    {
+                        if (this.responseText != null)
+                        {
+                            document.getElementById('info').innerHTML = this.responseText;
+                        } else
+                            alert("Ошибка AJAX: Данные не получены ");
+                    } else
+                        alert("Ошибка AJAX: " + this.statusText);
+                }
+            };
+            request.send(null);//не указываем ничего, т.к. не отправляем ни каких параметров
+            function ajaxRequest()
+            {
+                try
+                {
+                    var request = new XMLHttpRequest();
+                } catch (e1)
+                {
+                    try
+                    {
+                        request = new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch (e2)
+                    {
+                        try
+                        {
+                            request = new ActiveXObject("Microsoft.XMLHTTP");
+                        } catch (e3)
+                        {
+                            request = false;
+                        }
+                    }
+                }
+                return request;
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,38 @@
+1 Качаем с офф сайта версию комьюнити(была 4.7)
+2 Качаем Responsive File Manager
+3 Все это распаковываем в наш сайт
+4 Подключение:
+	1 ПРОПИСЫВАЕМ В HEADER
+	<script type="text/javascript" src="/tinymce/js/tinymce/tinymce.min.js"></script>
+	
+	2 Создаем в документе поле <textarea></textarea> и в конце страницы вставляем скрипт
+	    tinymce.init({
+        selector: 'textarea',  // change this value according to your HTML
+        height: 600,
+        auto_focus: 'element1',
+        plugins: 'responsivefilemanager image imagetools code textcolor colorpicker link lists table',
+        toolbar1: 'code | tools | styleselect | undo redo | formats | bold italic underline | blockquote | fontselect fontsizeselect | alignleft alignright aligncenter alignjustify | link | image imagetools | numlist bullist | table | responsivefilemanager | forecolor backcolor',
+        
+        //filemanager section
+        external_filemanager_path: '/filemanager/',
+        filemanager_title: "Файловый Менеджер" ,
+        external_plugins: {'filemanager' : '/filemanager/plugin.min.js'},
+        
+        //user style formats - обязательно добавить styleselect в toolbar1 иначе стили не появятся
+        style_formats:
+            [
+                { title: 'Image Left', selector: 'img', styles: {'float' : 'left', 'margin': '10px' } },
+                { title: 'Image Right', selector: 'img', styles: {'float' : 'right', 'margin': '10px'} },
+                { title: 'Clear Both', selector: 'p, h1, h2, h3, h4, h5, ul, ol, table, blockquote', styles: {'clear' : 'both'} }
+            ],
+     });
+
+     //секция plugins отвечает за подключенные модули
+     //filemanager section - отвечает за подключение Responsive File Manager
+	
+	3 В файле filemanager/config/config.php лежат настройки файлового менеджера
+		'upload_dir' => '/public_html/img/',
+		'current_path' => '../public_html/img/'
+		Эти две строчки отвечают за директорию загрузки и отображения файлов , изначально их значения /source/ и ../source/
+
+5 ВАЖНО!!! Ни в коем случае не ставить required в textarea тег с tinyMCE

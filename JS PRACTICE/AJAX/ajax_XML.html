@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            li {
+                border: 1px solid grey;
+                background-color: #cccccc;
+            }
+            li {
+                border-bottom: 1px dashed white;
+            }
+        </style>
+    </head>
+    <body>
+        <p>News List</p>
+        <ul id="output">
+        </ul>
+
+    </body>
+    <script>
+        nocache = "&nocache=" + Math.random() * 1000000;
+        url = "?xml=rss.news.yahoo.com/rss/topstories";
+        out = '';
+
+        request = new ajaxRequest();
+        request.open("GET", "urlpost.php" + url + nocache);
+
+        request.onreadystatechange = function()
+        {
+            if (this.readyState == 4)
+            {
+                if (this.status == 200)
+                {
+                    if (this.responseText != "")
+                    {
+                        titles = this.responseXML.getElementsByTagName('title')
+                        for (j = 0; j < titles.length; ++j)
+                        {
+                            out += "<li>" + titles[j].childNodes[0].nodeValue + '</li>'
+                        }
+                        document.getElementById('output').innerHTML = out
+                    } else
+                        alert("Ошибка AJAX: Данные не получены")
+                } else
+                    alert("Ошибка AJAX: " + this.statusText)
+            }
+        }
+        request.send(null);
+
+        function ajaxRequest() {
+            try {
+                request = new XMLHttpRequest();
+            } catch (e) {
+                try {
+                    request = new ActiveObject("Msxml2.XMLHTTP");
+                } catch (e1) {
+                    try {
+                        request = new ActiveObject("Microsoft.XMLHTTP");
+                    } catch (e2) {
+                        request = false
+                    }
+                }
+            }
+            return request;
+        }
+    </script>
+</html>

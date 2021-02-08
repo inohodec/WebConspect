@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+//Функция проверяет что было нажато(кнопка "Показать всё" к которой применено событие по щелчку и выполняеться функция
+// ajax() без передаваемого ей атрибута, соответственно если атрибут не передан, то он устанавливаеться в "url=anything"
+// или ондна из кнопок удаления записи из БД запускающая функцию ajax(this) где атрибут есть объект по которому щелкают)
+//и выполнаящая AJAX запрос
+            function ajax(currTag = "anything") {
+                if (currTag == "anything")// если атрибут == атрибуту по умолчанию, то POST запрос = "url=anything"
+                    post = "url=anything";
+                else {//иначе извлекаем данные из атрибута 'data-meal-ID' тега button сформированного php на стороне сервера
+                    post = "name=" + currTag.getAttribute('data-meal-ID');
+                }
+                //формируем AJAX запрос методом POST и подмтавляем данные полученные при нажатии на button
+                var request = checkXMLHTTP();
+                request.open("POST", "output.php", true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.setRequestHeader("Content-length", "");
+                request.setRequestHeader("Connection", "close");
+                request.onreadystatechange = function()
+                {
+                    if (this.readyState == 4) {
+                        if (this.status == 200) {
+                            if (this.responseText != null) {
+                                document.getElementById('output').innerHTML = this.responseText;
+                            } else
+                                alert('AJAX DATA HAVEN\'t RECEIVED');
+                        } else
+                            alert('AJAX DATA ERROR: ' + this.statusText);
+                    }
+                }
+                request.send(post);
+            }
+//Функция получения ID элемента по которому счелкнули, для удаления из DOM
+            function delDiv(buttonID) {
+                name = buttonID.id;
+                document.getElementById(name).remove();
+            }
+//Функция проверки типа браузера
+            function checkXMLHTTP() {
+                try {
+                    var query = new XMLHttpRequest();
+                } catch (e) {
+                    try {
+                        query = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e1) {
+                        try {
+                            query = new ActiveXObject('Msxml2.XMLHTTP');
+                        } catch (e2) {
+                            query = false;
+                        }
+                    }
+                }
+                return query;
+            }
+        </script>
+    </head>
+    <body>
+        <div id="output">TODO write content</div>
+        <button onclick="ajax()">Show Meals</button>
+    </body>
+</html>

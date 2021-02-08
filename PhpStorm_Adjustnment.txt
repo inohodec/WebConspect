@@ -1,0 +1,42 @@
+﻿Настройка удаленных проэктов(при условии что работаешь один)
+
+Во первых, при настройке подключению к проэкту на хостинге необходимо поставить галку "Passive mode" в "Advanced options"
+
+Далее в настройкач Deployment -> "Warn when uploading over newer file"(меняем на "Compare content") и ставим галки "Notify about remote changes", 
+а также "upload external changes". Первая отвечает за сравнение файлов на серваке и локальных и если на сервере кто-то изменил файл, то при следующем обращении к нему PhpStorm предупредит и спросит, что делать. Второй же отвечает за изменение или добавление файлов в локальном проэкте извне PhpStormb и отправляет эти изменения автоматом на сервер.
+
+Включить все это: Tools->Deployment->Browse Remote Host(и возможно Automated Apload)
+
+    Если мы меняли или добавляли файлы на сервере не через программу, а извне, тогда на прэкте правой кнопкой и "Deployment"->"Synchronize with deployment to...", а далее выбираем что нужно скачать(или две стрелки "all") 
+
+=============================================== Подключение к БД через Vagrant ======================================
+vagrant ssh-config показывает конфигурацию
+(пример вывода)
+HostName 127.0.0.1
+  User vagrant
+  Port 2222
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /media/Web-Projects/www/vagrant/puphpet/files/dot/ssh/id_rsa
+  IdentityFile /home/inohodec/.vagrant.d/insecure_private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+
+Добавляем стандартное подключение к MySql
+во вкладке General вводим имя БД на виртуальй машине, пользователя и пароль, далее переходим на вклядку SSH/SSL
+в поле  Proxy Host          - 127.0.0.1     Port - 2222
+в поле  Proxy User          - vagrant
+        Auth Type           - Key pair(OpenSSH or PuTTY)
+        Private key file    - [путь к проэкту и папке puphpet]/puphpet/files/dot/ssh/insecure_private_key
+
+для Homestead(Check your Homestead Folder>Homestead.yaml)
+
+
+
+Port: 3306
+User: homestead
+Pw: secret
+
+в SSH выбираем пароль вместо ключа и вводим vagrant, для обоих полей

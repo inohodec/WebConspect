@@ -1,0 +1,57 @@
+CHARACTER SET — это некий набор символов, называемых кодировкой. Разные CHARACTER SET включают в себя различные наборы символов. Различные CHARACTER SET могут включать примерно одинаковые наборы символов но в различном порядке (см. например koi8ru и cp1251). MySQL необходимо знать какой CHARACTER SET будет использован для данных в таблице, чтобы корректно проводтиь сортировку и индексацию данных.
+
+COLLATION — способ, с помощью которого следует упорядочивать и сравнивать данные в БД.
+Для одного и того же CHARACTER SET существует как правило несколько COLLATION.
+
+В случае вопросов вместо русских букв(при условии что БД и таблицы созданы в utf8 - CREATE DATABASE test CHARACTER SET utf8)
+1 Выполняем команду из НАШЕГО СКРИПТА - SHOW VARIABLES LIKE 'char%';
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | latin1     (нужно utf8)    | кодировка, в которой данные будут поступать от клиента
+| character_set_connection | latin1     (нужно utf8)    | по умолчанию для всего, что в рамках соединения не имеет кодировки
+| character_set_database   | utf8                       | кодировка по умолчанию для баз
+| character_set_filesystem | binary                     | кодировка для работы с файловой системой
+| character_set_results    | latin1     (нужно utf8)    | кодировка, в которой будет выбран результат
+| character_set_server     | latin1     (нужно utf8)    | кодировка, в которой работает сервер
+| character_set_system     | utf8                       | идентификаторы MySQL(всегда UTF8)
+| character_sets_dir       | /usr/share/mysql/charsets/ | папка с кодировками
++--------------------------+----------------------------+
+
+а так же - SHOW VARIABLES LIKE 'coll%';
++----------------------+------------------+
+| Variable_name        | Value            |
++----------------------+------------------+
+| collation_connection | latin1_swedish_ci| (нужно utf8_general_ci)
+| collation_database   | utf8_general_ci  |
+| collation_server     | latin1_swedish_ci| (нужно utf8_general_ci)
++----------------------+------------------+
+
+РЕШЕНИЕ:
+	1. После создания соединения в скрипте к БД, необходимо выставить кодировку соединения $connection->exec("set names utf8");
+	
+	2. sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+	   вставляем в [mysqld]
+
+	   character-set-server=utf8
+	   collation-server=utf8_general_ci
+
+	   и перезагружаем сервер mysql - sudo /etc/init.d/mysql restart
+	   character_set_client, character_set_connection, character_set_results, character_set_server изменятся на utf8 
+
+
+
+*****************************  Создание таблицы:  ******************************
+
+CREATE TABLE articles
+(
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    content TEXT,
+    alias VARCHAR(255),
+    place ENUM('MN', 'SB', 'NW'),
+    title VARCHAR(255),
+    description VARCHAR(255),
+    publicated BOOLEAN
+);
+CREATE UNIQUE INDEX articles_alias_uindex ON articles (alias);

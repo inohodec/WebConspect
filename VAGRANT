@@ -1,0 +1,11 @@
+vagrant up [id]  или переходим в папку puphpet и up-аем без id
+vagrant destroy [id]
+vagrant ssh-config показывает конфигурацию 
+vagrant ssh [id] подключение к виртуальной машине по ssh
+
+После развертывание машины заходим в wBLv4v/puphpet/config.yaml (где wBLv4v - папка из архива конфигуратора), далее меняем группу и пользователя общей папки на www-data, в ином случае у папки будет владелец vagrant и изменить их не получится, соответственно apache не сможет создавать/удалять файлы.
+
+synced_folder:
+            folder1:
+                owner: www-data
+                group: www-data

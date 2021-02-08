@@ -1,0 +1,16 @@
+
+# формирует приватный и публичный ключи в папке ~/.ssh
+ssh-keygen -t rsa -b 4096 -C "ваша@почта.com" - генерирует ключи используя как метку почту
+
+Linux
+# Запуск агента ssh, который следит за ключами
+$ eval "$(ssh-agent -s)"
+
+# Добавления нового ssh-ключа в агент
+$ ssh-add ~/.ssh/id_rsa
+
+Windows
+eval 'ssh-agent -s'
+ssh-add ~/.ssh/id_rsa
+
+Добавляем .ssh/id_rsa.pub в гитхаб

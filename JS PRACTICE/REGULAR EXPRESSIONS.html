@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript">
+		var lorem = 'Lorem ipsum 5 dolor1 sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud citation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. **********   1.000.000 ******  1.000.000.000 ******** 1.000 	***grEy  or grAy kon4ita *** Yahoo1';
+
+		var result = /ipsum.*dolor1/.test(lorem);//ишет "ipsum" и "dolor1" между ними могут быть (*) - любое кол-во любых символов(или не быть), точка(.) - этоодин любой символ кроме переноса строки
+		var result1 = /ipsum.+dolor1/.test(lorem);//ишет "ipsum" и "dolor1" между ними должен быть один или более любых символов
+		var result2 = /ipsum +dolor1/.test(lorem);//ишет "ipsum" и "dolor1" между ними должен быть хотя-бы один пробел
+		var result3 = /1(\.000)+/.test(lorem);//ищет 1 и .000, 3 нуля перед которыми должна встретиться точка, должны присутствовать раз или более 
+		var wer = /gr.y/.test(lorem); //ищет gr*y где * - любой символ
+		var colours = /gr[AE]y/.test(lorem);//[] Эта пара, как и точка, соответствует всего одному символу, но в эти скобки помещается перечень всех возможных соответствий, возможно [a-zA-z0-1] и т.д.
+		var kon4ita = /kon\dita/.test(lorem);// \d -любая цифра, можно так же [0-1] 
+		var except = /Yahoo[^!]/.test(lorem);// будет искать Yahoo* где * - любой символ кроме (!), внутри [] знак ^ значит "не"
+		var beginning = /^Lorem/.test(lorem);//вначале выражения знак ^ значит что строка должна начинаться искомым выражением и если оно стоит не в самом начале, то оно не найдеться "Lorem nnn..." - OK, "Hi Lorem hj" - It's not OK
+		var ending = /Lorem$/.test(lorem);//тоже что и выше, только строка должна заканчиваться искомым выражением
+		
+		var range = /c[a-z]{8}ur/.test(lorem); //ищет c и ur между которыми 8 меленьких букв
+		var range1 = /c[a-z]{0,}ur/.test(lorem);//ищет c и ur между которыми от 0 и более малениких букв
+		var range3 = /c[a-z]{3,8}ur/.test(lorem);//ищет c и ur между которыми от 3 до 8 малениких букв
+		var mixture = /rec(ei|ie)ve/.test(lorem);//ищет receive или recieve
+
+		var example = /[a-z]{1,8}/i.test(lorem);//любые буквы в количестве от 1 до 8 и ВАЖНО (i) после (/) отключает чувствительность к регистру т.е. /[a-zA-Z]/ = /a-z/i
+		var example1 = /[a-z]{1,8}/g.test(lorem);// (g) - включает многократный поиск. По умолчанию выражение ищется до первого совпадения и когда оно найдену завершает свою работу, с модификатором g он находит все совпадения 
+		var example2 = /[a-z]{1,8}/m.test(lorem); //включаем мультистрочность, т.е. рассматривает текст после символа переноса строки(\n), как новую строку(полезно с ^ и $)
+
+		//**************ЗАМЕНА ВСЕХ НАЙДЕННЫХ РЕЗУЛЬТАТОВ********************
+		document.write(lorem.replace(/ [a-z]{3} /ig, ' 111 '));//Входной текст в переменной lorem не меняеться!!! Ищет все отдельностоящие трехсимвольные слова
+
+		//можно как в PHP делать так:
+		var pattern = / [a-z]{2} /ig; // БЕЗ КАВЫЧЕК!!!
+		var replacement = " REPLACEMENT!!! ";
+		document.write(lorem.replace(pattern, replacement));
+
+		if (range) alert('I\'ve cought the match');
+		else alert("There aren't any matches");
+	</script>
+</head>
+<body>
+	
+</body>
+</html>

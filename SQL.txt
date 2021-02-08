@@ -1,0 +1,158 @@
+DATETIME  - дата в будующем 10:30 22/11/20
+DATE      - дата в прошлом(желательно) 22/11/06
+TIMESTAMP - тукущее время
+
+CREATE TABLE test (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(60) NOT NULL,
+    surname VARCHAR(60) NOT NULL DEFAULT "Smith",
+    preferences TEXT,
+    birthday DATE, 
+    PRIMARY KEY (ID)
+    );
+
+#можно для первичного ключа делать так: AUTO_INCREMENT=5
+
+/*============================= INSERT =============================================*/
+
+INSERT INTO table_name (column1, colunm2, column3,...) VALUES ('value1', 'value2', 'value3',...);
+INSERT INTO table_name VALUES ('value1', 'value2', 'value3',...);/*в данном случае порядок столбцов нужно соблюдать*/
+
+/*============================= SELECT: AND, OR, BETWEEN, NOT, IS NULL ============================================*/
+
+SELECT * FROM customer WHERE (cust_id <= 10 AND state='NH') OR (cust_id <= 4 AND state='MA');
+SELECT * FROM customer WHERE cust_id BETWEEN 5 AND 10;
+SELECT * FROM customer WHERE NOT cust_id BETWEEN 5 AND 10;
+SELECT * FROM customer WHERE cust_id NOT 10;
+SELECT * FROM product WHERE date_retired IS NULL;
+SELECT * FROM product WHERE  NOT date_retired IS NULL;
+
+/*==================================== IN - замена OR ===========================================*/
+
+/*Вместо SELECT fname, lname FROM employee WHERE title='president' OR title='Teller' OR title=...*/ 
+SELECT fname, lname FROM employee WHERE title IN('president', 'Teller');
+SELECT fname, lname FROM employee WHERE title NOT IN('president', 'Teller');
+
+
+/*================================= LIKE ===========================================*/
+
+/* '%' - любое кол-во символов  */
+/* '_' - один любой символ  */
+SELECT * FROM customer WHERE address LIKE "%Ln"; /*выберет все что заканчивается на 'Ln'*/
+SELECT * FROM customer WHERE city LIKE "____m";  /*выберет слово из 4 произвольных символов и оканчивающихся на "m"
+
+
+/*================================ DELETE, UPDATE, SET ===================================*/
+
+/*DELETE - унмчтожает только целую строку, а UPDATE отдельно колонки*/
+DELETE FROM your table; 		# удаляет все записи из таблицы
+
+/*UPDATE  может изменять одну запись или несколько записей в зависимости от условия WHERE*/
+UPDATE customer SET fed_id='666-66-6666' WHERE cust_id=2;
+
+# математические операции с UPDATE
+UPDATE drinks SET cost = cost + 10 WHERE name='beer';	
+
+# поочередно пройдется по каждой строке и поместит в каждой строке в ntreobq столбец new_column последние 
+# 2 символа из текущего столбца old_column
+UPDATE new_column SET old_column = RIGHT(location, 2); 
+
+/*========================= Нормализация ТАБЛИЦ ===================================*/
+# Структура таблицы за­висит от того, как вы собираетесь использо­вать свои данные.
+/*
+1. Выберите ОДИН объект, который должна описывать таблица.
+(Какой основной объект описывает ваша таблица?)
+
+2. Составьте список того, что необходимо знать об этом объекте при работе с таблицей.
+(Как вы предполагаете ИСПОЛЬЗОВАТЬ таблицу для получения информации о ее объекте?)
+
+3. Используя список, разбейте необ­ходимую информацию об объекте на фрагменты(атомарные), которые могут использоваться 
+для определения структуры таблицы
+(Содержат ли столбцы таблицы атомарные данные, чтобы запросы были короткими и конкретными?)
+
+Атомарные данные - это данные деление которых на части невозможно, но все зависит от случая. К примеру в
+банке нет необходимости разбивать адрес клиента на части, т.к. достаточно полного адреса для отправка уведомления, 
+но при поиске квартиры в определенном районе, смысл есть, т.к. нужно найти номера домов с квартирами для продажи!
+
+ПРАВИЛО 1. Столбец, содержащий атомарные данные, не может состоять из нескольких однотипных элементов.
+food | ingridients
+------------------------
+хлеб | мука, яйцо, соль
+салат| огурец, масло, помидор
+
+ПРАВИЛО 2. Таблица с атомарными данными не может содержать несколько однотипных столбцов.
+teacher | student1 | student2 | ...
+------------------------------------
+Greg    | Max      | Lena
+*/
+
+/*============================ Возврат команд после создания таблицы =================================*/
+SHOW CREATE TABLE my_contacts;
+
+/*============================= Изменние таблицы ====================================================*/
+ALTER TABLE table_name ADD COLUMN id INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (id);
+# вместо FIRST можно использовать: LAST, AFTER column_name, BEFORE column_name, SECOND, FIFTH и т.д.
+ALTER TABLE table_name ADD COLUMN phone_number VARCHAR(10) AFTER id;
+
+# CHANGE - изменение имени и типа данных столбцов(vj;yj gthtxbckznm xthtp pfgzne.)
+ALTER TABLE branch CHANGE name new_name VARCHAR(40);
+ALTER TABLE branch CHANGE COLUMN name new_name VARCHAR(40),
+				   CHANGE COLUMN id new_id INT;
+
+# MODIFY - изменение типа данных или позиции столбцов 
+ALTER TABLE table_name MODIFY COLUMN column_name INT; 
+
+# ADD - добавление столбцов в таблицу
+ALTER TABLE table_name ADD COLUMN phone_number VARCHAR(10), ADD PRIMARY KEY ('phone number');
+
+# DROP- удаление столбцов из таблицы
+ALTER TABLE table_name DROP phone_number; 
+
+# RENAME - переименование таблицы
+ALTER TABLE sometable RENAME TO anothertable;
+
+
+/*=============================== Строковые Функции ======================================*/
+# Выберет все строки в которых значение столбца address заканчивается на 3 символа Ln.
+SELECT * FROM branch WHERE RIGHT(address, 3)='Ln.';
+#выберет все записи колонки address и выведет из каждой записи только последние 3 символа
+SELECT RIGHT(address, 3) FROM branch;
+#выведет все записи в которых колонка содержит запись с пробелом и эта запись до пробела - 378, 1 - ищет первое совпадение 
+SELECT * FROM branch WHERE SUBSTRING_INDEX(address, ' ', 1)='378';
+#выводит длинну возвращаемой строки
+SELECT LENGTH('Сан-Антонио, ТХ');
+
+SELECT LENGTH(address) FROM TABLE_NAME;
++-----------------+
+| LENGTH(address) |
++-----------------+
+|              13 |
+|              13 |
+|              20 |
+|              15 |
++-----------------+
+
+================================ CASE =======================================
+UPDATE movie_table
+SET category =
+CASE
+   WHEN drama = 'Д' THEN 'драма'
+   WHEN comedy = 'Д' THEN 'комедия'
+   WHEN action = 'Д' THEN 'боевик'
+   WHEN gore = 'Д' THEN 'ужасы'
+   WHEN sclfi = 'Д' THEN 'фантастика'
+   WHEN for_kids = 'Д' THEN 'семейное'
+   WHEN cartoon = 'Д' AND rating = 'G' THEN 'семейное'
+ELSE 'misc'
+END;
+
+
+================================ ORDER BY ===================================
+SELECT title, category FROM movie_table WHERE category = 'семейное' ORDER BY title;
+
+# сначала отсортирует по категории, потом, по имени
+SELECT title, category FROM movie_table WHERE category = 'семейное' ORDER BY category, title;
+
+================================ COUNT ======================================
+# посчитает кол-во полей id в таблице product
+SELECT COUNT(id) FROM product;

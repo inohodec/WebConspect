@@ -1,0 +1,41 @@
+1 vagrant box add laravel/homestead 
+
+В моем случае была проблема (отсутствовала последняя версия для virtualbox) и пришлось ставить предыдущую версию
+
+1.1 vagrant box add laravel/homestead https://vagrantcloud.com/laravel/boxes/homestead/versions/6.1.0/providers/virtualbox.box
+
+2 git clone https://github.com/laravel/homestead.git ~/Homestead (где ~/Homestead любая нужная директория)
+
+3 cd ~/Homestead        (переходим в директорию с клонированным репозиторием)
+
+4 git checkout v7.14.2  (переключаемся в текущую ветку v7.14.2, номер берем из офф доков на сайте)
+
+5 init.bat              (создаем Homestead.yaml)
+
+6 ssh-keygen -t rsa    (генерируем ssh ключи, но можно и пропустить, т.к. при первом vagrant up создаст по умолчанию)      
+
+7 открываем Homestead.yaml
+
+    authorize: ~/.ssh/id_rsa.pub                путь к ssh ключам
+
+    folders:
+    - map: ~/code                               папка на реальном ПК
+      to: /home/vagrant/projects                    папка в образе
+
+    - map: ~/code_again                         папка на реальном ПК
+      to: /home/vagrant/public_html             папка в образе
+
+      sites:
+    - map: homestead.test                       название домена
+      to: /home/vagrant/projects/Laravel/public     папка с index.php
+
+
+    добавляем в hosts - 192.168.10.10  homestead.test
+
+8 Если добавили новые папки или сайты то выполняем vagrant provision при этом машина должна быть "поднята", смена сайтов работает без перезагрузки машины, но при добавлении папок нужно её перегружать...
+  Либо же  vagrant reload --provision  
+
+9  vagrant ssh
+10 composer global require "laravel/installer"        устанавливаем laravel глобально
+11 export PATH="~/.config/composer/vendor/bin:$PATH"  добавляем возможность использование команды laravel напрямую
+12 laravel new project_name                           создаст в текущей папке проэкт(папку project_name и запишет туда необходимые файлы)

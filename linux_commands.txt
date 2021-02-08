@@ -1,0 +1,81 @@
+linux
+
+					Пользователи и группы
+-----------------------------------------
+whoami 									- выводит пользователя
+
+max
+-----------------------------------------
+id										- информация о пользователе
+
+uid=1000(max) gid=1000(max) groups=1000(max),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),117(netdev)
+-----------------------------------------
+cat /etc/passwd							- информация о всех пользователях 	
+
+имя : пароль : id пользователя : id группы : описание : домашняя директория : шелл по умолчанию(nologin значит что пользователь не может входить в систему)
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+...
+sshd:x:109:65534::/run/sshd:/usr/sbin/nologin
+landscape:x:110:115::/var/lib/landscape:/usr/sbin/nologin
+pollinate:x:111:1::/var/cache/pollinate:/bin/false
+max:x:1000:1000:,,,:/home/max:/bin/bash
+------------------------------------------
+stat /etc/my-file						- информация о файле	
+
+File: /etc/my-file
+Size: 0               Blocks: 0          IO Block: 4096   regular empty file
+Device: 2h/2d   Inode: 32932572275166232  Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2020-12-06 13:18:22.199778300 +0200
+Modify: 2020-12-06 13:18:22.199778300 +0200
+Change: 2020-12-06 13:18:22.199778300 +0200
+Birth: -
+--------------------------------------------
+sudo -u nobody mkdir /tmp/test			- создает директорию от пользователя nobody(вызывает sudo для выполнения указанной команды от имени пользователя, отличного от root)
+--------------------------------------------
+sudo -i 								- вретенно стать root
+
+
+
+					Права доступа
+----------------------------------
+rwx для файла - все просто read - write - execute
+r - для директории - возможность читать список файлов в ней
+w - возможность писать в дректорию
+x - Это право позволяет перемещаться в директорию и обращаться ко всем расположенным в ней файлам и каталогам, т.е если мы хотим прочитать ls -la, то без этого атрибута ничего не выйдет, т.к. для 	обращения к метаданным файла, необходим отрибут x
+----------------------------------
+chown rob:developers strace.log			- поменять пользователя и группу у файла strace.log
+chown rob:developers strace.log 1.txt	- то же что и выше, но для двух файлов
+chown rob strace.log					- сменить владельца
+chown :newgroup /home					- сменить id группы
+chown -R max base						- сменить владельца у папки base и всех ее подпапок(рекурсивно)
+
+
+
+					Выполнение программ
+-----------------------------------
+type cp							- эти команды показывают расположение запускаемой программы
+wich cp
+wereis cp	
+
+Для вновь устанавливаемых программ обычно это /usr/local/bin
+запуск программы из текущей директории делается через
+./someProgramm
+если указать без точки, то будет ошибка(сделано из соображений безопасности)
+
+стандартные пути берутся из переменной PATH
+echo $PATH
+
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/windows/system32:/mnt/c/windows:/mnt/c/windows/System32/Wbem:/mnt/c/windows/System32/WindowsPowerShell/v1.0/:/mnt/c/windows/System32/OpenSSH/:/mnt/c/Program Files/7-Zip:/mnt/c/Program Files (x86)/Common Files/Acronis/SnapAPI/:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Users/judas/AppData/Local/Microsoft/WindowsApps:/snap/bin
+
+не рекомендуется менять эту переменную, но если необходимо:
+нужно поправить один из конфигурационных файлов Bash. Эти файлы лежат в домашней директории пользователя:
+
+.bashrc
+.bash_profile
+.profile
+
+В зависимости от настроек терминала, Bash прогружает либо одни файлы, либо другие. Если в вашей домашней директории есть файл .bashrc, то пробуйте использовать его, если нет, то остальные файлы в том порядке, в котором они приведены выше. Добавьте в этот файл следующую строку:
+
+export PATH=$PATH:/path/to/directory

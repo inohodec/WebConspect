@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>TODO write content</div>
+        <div id="content"></div>
+        <script type="text/javascript">
+            var text = "TEXT=Lorem ipsum dolor sit amet, consectetur adipisicing elit.";
+            var request = checkAjaxVersion();
+
+            request.open("POST", "urlpost.php", true); //Настраивает соединение!(не открывает)
+            //Создаем заголовки для POST запроса
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.setRequestHeader("Content-Lenght", text.length);
+            request.setRequestHeader("Connection", "close");
+
+            request.onreadystatechange = function() {
+                if (this.readyState == 4)
+                {
+                    if (this.status == 200)
+                    {
+                        if (this.responseText != null)
+                        {
+                            document.getElementById('content').innerHTML = this.responseText;
+                        } else
+                            alert("Ошибка AJAX: Данные не получены ");
+                    } else
+                        alert("Ошибка AJAX: " + this.statusText);
+                }
+            };
+            request.send(text);
+
+            //функция проверки поддержки ajax
+            function checkAjaxVersion() {
+                try {
+                    //присваеваем стандартный объект IE8,IE9 поддерживают с ограничениями, все остальное норм
+                    var request = new XMLHttpRequest();
+                    //если вылазит ошибка, то она игнорируется и переходит к "cath (error_one)"
+                } catch (error_one) {
+                    try {
+                        //присваеваем объект IE6+ ,
+                        request = new ActiveXObject("Msxml2.XMLHTTP");
+                        //если ошибка то следующий "catch (error_two)"
+                    } catch (error_two) {
+                        try {//присваеваем объект IE5, хотя думаю что эта проверка лишняя, т.к. найти его не реально
+                            request = new ActiveXObject("Microsoft.XMLHTTP");
+                        } catch (error_three) {
+                            request = false;
+                        }
+                    }
+                }
+                return request;
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,67 @@
+локальная установка
+
+1) php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+2) php -r "if (hash_file('sha384', 'composer-setup.php') ===  '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer 4corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+3) php composer-setup.php
+4) php -r "unlink('composer-setup.php');"
+
+1) Download the installer to the current directory
+2) Verify the installer SHA-384, which you can also cross-check here
+3) Run the installer
+4) Remove the installer
+
+------------------------------------------------------------------
+
+глобальная установка
+
+Для того чтобы установить Composer глобально, PHAR-архив следует переименовать
+в удобную вам форму, например, просто в composer. При этом файлу должны быть вы-
+ставлены права доступа на выполнение, например, 0755. Для того чтобы файл был дос-
+тупен в любой точке файловой системы, его следует разместить в папке /user/local/bin:
+
+mv composer.phar /usr/local/bin/composer
+composer --version
+
+------------------------------------------------------------------
+
+установка из composer.json
+
+composer install                глобально установленный composer
+php composer.phar install       локально установленный composer
+------------------------------------------------------------------
+
+Обновление компонента
+composer update phploc/phploc
+------------------------------------------------------------------
+
+ОБЯЗАТЕЛЬНО ПОДКЛЮЧАЕМ НАШ ФАЙЛ autoload.php из папки vendor
+Для автозагрузки наших классов добавляем в composer.json в корне проэкта
+{
+    "autoload": {
+        "psr-4": {
+            "Services\\": "src/Services",
+            "App\\": "utils/App"
+        }
+    }
+}
+и обновляем конфигурацию
+
+composer dump-autoload -o
+или если composer стоит локально, тогда 
+php composer.phar dump-autoload -o
+
+
+EXAMPLE
+
+"autoload": {
+    "psr-4": {
+      "User\\": "src"
+    }
+
+
+
+use User\Controller\NewsController;
+use User\Test;
+
+Classes are in scr/Controller/NewsController.php
+Classes are in scr/Test.php 
