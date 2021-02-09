@@ -23,8 +23,16 @@ mv composer.phar /usr/local/bin/composer
 composer --version
 
 ------------------------------------------------------------------
+установка(локальная)
+composer require tightenco/collect
+
+установка(глобальная)
+composer global require tightenco/collect
+
 
 установка из composer.json
+производим данное действие после клонирования проэкта, когда composer.json 
+загружен, а соответственно самих библиотек нет
 
 composer install                глобально установленный composer
 php composer.phar install       локально установленный composer
