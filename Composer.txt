@@ -34,6 +34,7 @@ composer global require tightenco/collect
 производим данное действие после клонирования проэкта, когда composer.json 
 загружен, а соответственно самих библиотек нет
 
+установка пакетов из composer.json
 composer install                глобально установленный composer
 php composer.phar install       локально установленный composer
 ------------------------------------------------------------------
