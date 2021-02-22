@@ -43,34 +43,91 @@ php composer.phar install       локально установленный comp
 composer update phploc/phploc
 ------------------------------------------------------------------
 
-ОБЯЗАТЕЛЬНО ПОДКЛЮЧАЕМ НАШ ФАЙЛ autoload.php из папки vendor
-Для автозагрузки наших классов добавляем в composer.json в корне проэкта
-{
-    "autoload": {
-        "psr-4": {
-            "Services\\": "src/Services",
-            "App\\": "utils/App"
+АВТОЗАГРУЗКА ФАЙЛОВ
+
+1 ОБЯЗАТЕЛЬНО ПОДКЛЮЧАЕМ НАШ ФАЙЛ autoload.php из папки vendor
+    equire_once __DIR__ . '/vendor/autoload.php';
+
+    ----После каждого редактирования composer.json выполняет обновление компосера
+    composer dump-autoload -o
+    или если composer стоит локально, тогда 
+    php composer.phar dump-autoload -o
+
+2 Для автозагрузки наших классов по стандарту PSR-0 добавляем в composer.json в корне проэкта
+    {
+        "autoload": {
+            "psr-0": {
+                "VendorName\\NameSpace": "src",
+                "MyPhpLab\\Agregator": "src"            //an example
+            }
         }
     }
-}
-и обновляем конфигурацию
+    это значит, что файл с необходимым классом должен лежать в src\MyPhpLab\Agregator и иметь такое же пространство имён,
+    так же название класса внутри файла должно совпадать с назанием класса, к примеру new MyPhpLab\Agregator\MyClass(); 
+    должен соответствовать файлу src\MyPhpLab\Agregator\MyClass.php
+    В дальнейшем подпапки добавлять не нужно, все делается автоматически, главное соблюдать вышеописанный принцип
 
-composer dump-autoload -o
-или если composer стоит локально, тогда 
-php composer.phar dump-autoload -o
+        пример:
+            --------composer.json------------- 
+            "psr-0": {
+                "MyPhpLab\\Library": "src/"
+            }
+            ---------catalog structure--------
+            d - в начале означает, что это каталог
+            d--src--
+                   |d--MyPhpLab--
+                                |d--Library--|
+                                             |d--SubFolder-------|
+                                             |CollectUsers.php   |
+                                                                |CollectGroups.php 
+            ---------index.php----------------                   
+            $w = new MyPhpLab\Library\CollectUsers();
+            $a = new MyPhpLab\Library\SubFolder\CollectGroups();
+            echo $w->getNamespace() . PHP_EOL;
+            echo $a->getNamespace() . PHP_EOL; 
 
+3 Для автозагрузки наших классов по стандарту PSR-4 добавляем в composer.json в корне проэкта
+и обновляем конфигурацию. Принято использовать этот формат!!!
+    пример:
+        ---------composer.json------------- 
+        "autoload": {
+            "psr-4": {
+                "MyPhpLab\\Agregator\\": "src"        //важно сохранять синтаксис левой строки 
+        }
+        ---------catalog structure--------
+            d - в начале означает, что это каталог
+            d--src--
+                   |d--SubFolder-------|
+                   |CollectUsers.php   |
+                                       |CollectGroups.php 
 
-EXAMPLE
+        ---------index.php----------------                   
+            $w = new MyPhpLab\Library\CollectUsers();
+            $a = new MyPhpLab\Library\SubFolder\CollectGroups();
+            echo $w->getNamespace() . PHP_EOL;
+            echo $a->getNamespace() . PHP_EOL;
 
-"autoload": {
-    "psr-4": {
-      "User\\": "src"
+4 Автозагрузка classmap, сканирует указанные папки и все, что находится в них, подгружая найденные фвйлы с классами
+    пример, никакие пути при этом можно не соблюдать
+        -----composer.json
+        "autoload": {
+            "classmap": ["src", "lib"]
+           }
+        ---------catalog structure--------
+            d--src--|
+                    |d--SubFolder-------|                       
+                    |CollectUsers.php   |                       //namespace MyPhpLab\Library;
+                                        |CollectGroups.php      //namespace MyPhpLab\Library;
+        ---------index.php----------------
+        $w = new MyPhpLab\Library\SomeClass();
+        $a = new MyPhpLab\Library\SomeAnotherClass();
+
+5 Автозагрузка файлов по отдельности
+    "autoload": {
+        "files": ["src/Pairs.php", "src/Lists.php"]
     }
 
 
 
-use User\Controller\NewsController;
-use User\Test;
 
-Classes are in scr/Controller/NewsController.php
-Classes are in scr/Test.php 
+
