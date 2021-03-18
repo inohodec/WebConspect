@@ -22,6 +22,8 @@
 mv composer.phar /usr/local/bin/composer
 composer --version
 
+composer init инициализирует папку и создаёт composer.json
+
 ------------------------------------------------------------------
 установка(локальная)
 composer require tightenco/collect
