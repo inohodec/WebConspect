@@ -1,0 +1,75 @@
+docker pull php:7.4.5-apache-buster						- скачиваем образ 7.4.5-apache-buster из репозитория php
+docker images 											- список образов
+docker ps 												- список запущеных контейнеров
+docker ps -a 											- список всех контейнеров
+docker ps -a -q											- список ID всех контейнеров
+
+docker rm [имя или ID]									- удалить контейнер
+docker rm $(docker ps -qa)   							- удалит все контейнеры, Опция –q (–quiet) — дает возможно узнавать  идентификаторы самих контейнеров с утилитой ps.
+
+docker build -t [имя образа] --name myImage				- создает образ с именем myImage
+docker build -t [name of our mew image] [Dockerfile location]  - создает образ из dockerfile
+docker build -t [name of our mew image] -f [location to any file with dockerfile content] - создает образ из и берет данные из любого файла
+
+docker run --name [имя контейнера] [имя образа]
+docker run --name [имя контейнера] -d [имя образа]		- запустит контейнер в фоне, иначе консоль будет занята и мы не сможем ее пользовать
+
+docker stop [имя контейнера]							- останавливает контейнер
+
+docker run --name [имя контейнера] -d --rm [имя образа] - запуск контейнера в фоне и после его отработки или ручной остановки он удалиться
+docker run -p [порт]:[порт]								- пробрасывает порты
+docker run -e [переменная окружения]					- устанавливает переменную окружения, например -e TZ=Europe/Kyiv
+
+пример
+docker run --name myContainer -d --rm -e TZ=Europe/Kyiv -p 8080:8080
+
+docker run -w [workDirectory]							-рабочий католог в контейнере
+
+docker -v [папка на хосте]:[папка в контейнере]			- использование volume(монтирование папок)
+
+docker run --name apache -p 8080:80 --rm -d -v d:/PROJECTS/docker_test:/var/www/html 411f1fb43be0 - пример старта контейнера на винде(до это нужно включить шаринг диска в докере)
+
+docker exec -it [ID/name контейнера] bash или sh		- доступ в контейнер из вне 
+																	-i, --interactive: Оставить STDIN открытым, даже если контейнер запущен в неприкрепленном режиме, (stdin) - это поток номер 0 зарезервирован для чтения команд пользователя или входных данных
+																	-t, --tty: Запустить псевдотерминал
+
+подключение контейнеров друг к другу
+вариант 1
+docker run --name nginx --link [name контейнера] ...	- подключит данный контейнер к указаному в скобках пример: docker run --name nginx --link php-fpm -p 80:80 -v ..., соответственно контейнер будет доступен по адресу php-fpm 
+
+вариант 2
+docker network create -d bridge my_network				- создаем сеть my_network
+docker network connect --alias name my_network container_name  -где name имя по которому контейнер будет доступен в нашей сети, соответственно в сеть нужно добавить все необходимые контейнеры
+
+пример:
+docker network create -d bridge my_network
+docker network connect --alias php-fpm my_network php-fpm
+docker network connect --alias nginx my_network nginx
+docker network disconnect my_network adminer
+
+проверить что входит в нашу сеть
+docker network ls 										- выводит список всех сетей
+docker network inspect my_network						- выведет JSON с всеми св-вами сети
+docker network rm dockercompose_web-app					- удалить сеть
+
+
+
+FROM ubuntu:20.04
+
+LABEL maintainer="max ostepan"
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && apt-get install -y mc apache2 php-curl php-json php-cgi php-gd php-zip php-mbstring php-xml php-xmlrpc
+CMD ["apachectl", "-D", "FOREGROUND"]
+
+
+alpine linux
+nginx -s reload -c /etc/nginx/nginx.conf
+
+
+
+
+
+Docker-compose
+docker up -d
+docker-compose stop php-fpm nginx mariadb
+docker-compose start php-fpm nginx mariadb
