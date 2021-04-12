@@ -1,0 +1,20 @@
+Чтобы найти файл настройками (php.ini) выполните в терминале команду php --ini или запустите веб-сервер с кодом phpinfo().
+вывод консоли:
+    Build Date => Mar  5 2021 07:54:38
+    Server API => Command Line Interface
+    Virtual Directory Support => disabled
+    Configuration File (php.ini) Path => /etc/php/7.4/cli
+    Loaded Configuration File => /etc/php/7.4/cli/php.ini
+    Scan this dir for additional .ini files => /etc/php/7.4/cli/conf.d
+    Additional .ini files parsed => /etc/php/7.4/cli/conf.d/10-opcache.ini,
+    /etc/php/7.4/cli/conf.d/10-pdo.ini,
+    /etc/php/7.4/cli/conf.d/15-xml.ini,
+    ...
+    /etc/php/7.4/cli/conf.d/20-xsl.ini,
+    /etc/php/7.4/cli/conf.d/20-zip.ini
+
+В Linux PHP подгружает не только основной файл, но и файл из этой директории. Например, на Ubuntu путь к директории конфигурационных файлов для PHP может быть таким — /etc/php/7.4/cli/conf.d В ней создаём файл с необходимыми правами (требуются root права, имя = xx-Name.ini, где xx - число)
+
+php -i выводит текущие настройки из конфигурационных файлов
+
+sudo systemctl reload php7.4-fpm.service -- перезагрузка php
