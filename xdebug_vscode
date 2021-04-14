@@ -1,0 +1,24 @@
+добавляем в php.ini или другой конфигурационный файл
+
+xdebug версии 3+
+
+[xdebug]
+zend_extension=xdebug.so
+xdebug.mode = debug
+xdebug.start_with_request = yes
+xdebug.client_port = 10000
+
+--------------------------------------------------------------------
+xdebug версии 2+
+
+[xdebug]
+zend_extension=xdebug.so                    ;Или путь к файлу xdebug.so
+xdebug.remote_autostart=1
+xdebug.remote_enable=1
+xdebug.remote_host=127.0.0.1
+xdebug.remote_port=9000                     ;Порт, который мы указали в launch.json
+xdebug.idekey=code                          ;у меня работало и без
+
+Важно понимать, что если запись zend_extension=xdebug.so будет присутствовать в нескольких файлах,
+тогда будет возникать ошибка, из-за того, что пхп будет пытаться загружать xdebug 2 раза
+
