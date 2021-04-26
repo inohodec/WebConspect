@@ -81,8 +81,8 @@ composer update phploc/phploc
                    |d--MyPhpLab--
                                 |d--Library--|
                                              |d--SubFolder-------|
-                                             |CollectUsers.php   |
-                                                                |CollectGroups.php 
+                                             |---CollectUsers.php|
+                                                                 |CollectGroups.php 
             ---------index.php----------------                   
             $w = new MyPhpLab\Library\CollectUsers();
             $a = new MyPhpLab\Library\SubFolder\CollectGroups();
@@ -101,7 +101,7 @@ composer update phploc/phploc
             d - в начале означает, что это каталог
             d--src--
                    |d--SubFolder-------|
-                   |CollectUsers.php   |
+                   |---CollectUsers.php|
                                        |CollectGroups.php 
 
         ---------index.php----------------                   
@@ -109,6 +109,38 @@ composer update phploc/phploc
             $a = new MyPhpLab\Library\SubFolder\CollectGroups();
             echo $w->getNamespace() . PHP_EOL;
             echo $a->getNamespace() . PHP_EOL;
+
+3.1 Автозагрузка файлов
+        ---------composer.json------------- 
+        "autoload": {
+        "psr-4": {
+            "Ostepan\\Lib\\" : "src"
+            }
+         }
+        -------catalog structure--------
+        d--appFolder
+                    |index.php
+                    |...
+                    |src
+                    |   |__Translator.php
+                    |   |__Viewer.php
+                    |   |__Loggers
+                                  |__AccessLogger.php
+
+        ------index.php-----------------
+        $filePath = __DIR__ . "/vendor/autoload.php";
+        require_once $filePath;
+
+        $translator = new Ostepan\Lib\Translator();
+        $viewer = new Ostepan\Lib\Viewer();
+
+        --------src/Translator.php--------------src/Viewer.php------------------/src/Logger/Access.php-------------
+        namespace Ostepan\Lib;              namespace Ostepan\Lib;              namespace Ostepan\Lib\Loggers;
+
+        class Translator                    class Viewer                        class Access
+        {                                   {                                   {
+            //...code                           //...code                           //...code
+        }                                   }                                   }
 
 4 Автозагрузка classmap, сканирует указанные папки и все, что находится в них, подгружая найденные фвйлы с классами
     пример, никакие пути при этом можно не соблюдать
@@ -119,7 +151,7 @@ composer update phploc/phploc
         ---------catalog structure--------
             d--src--|
                     |d--SubFolder-------|                       
-                    |CollectUsers.php   |                       //namespace MyPhpLab\Library;
+                    |---CollectUsers.php|                       //namespace MyPhpLab\Library;
                                         |CollectGroups.php      //namespace MyPhpLab\Library;
         ---------index.php----------------
         $w = new MyPhpLab\Library\SomeClass();
