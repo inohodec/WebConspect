@@ -18,3 +18,25 @@
 $generate = function () use ($age) {
     print_r($age);
 };
+
+//an example
+
+function without(array $items, $value)
+{
+    $filtered = array_filter($items, function ($item) use ($value) {
+        return $item !== $value;
+    });
+    // Сбрасываем ключи
+    return array_values($filtered);
+}
+
+without([3, 4, 10, 4, 'true'], 4); // [3, 10, 'true']
+
+//можно использовать стрелочные функции т.к. они имеют доступ у глобальной области видимости
+
+function without(array $items, $value)
+{
+    $filtered = array_filter($items, fn($item) => $item !== $value);
+    // Сбрасываем ключи
+    return array_values($filtered);
+}
