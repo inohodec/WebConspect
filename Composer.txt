@@ -59,9 +59,9 @@ composer update phploc/phploc
     {
         "autoload": {
             "psr-0": {
-                "VendorName\\NameSpace": "src",
+                "VendorName\\NameSpace\\": "src",
 
-                "MyPhpLab\\Agregator": "src"            //an example
+                "MyPhpLab\\Agregator\\": "src"            //an example
             }
         }
     }
@@ -73,7 +73,7 @@ composer update phploc/phploc
         пример:
             --------composer.json------------- 
             "psr-0": {
-                "MyPhpLab\\Library": "src/"
+                "MyPhpLab\\Library\\": "src/"
             }
             ---------catalog structure--------
             d - в начале означает, что это каталог
