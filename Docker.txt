@@ -52,7 +52,8 @@ docker network ls 										- выводит список всех сетей
 docker network inspect my_network						- выведет JSON с всеми св-вами сети
 docker network rm dockercompose_web-app					- удалить сеть
 
-
+статья посвящена хранению данных (что-бы понять как сохранять данные к примеру в майскьюэл)
+https://habr.com/ru/company/southbridge/blog/534334/
 
 FROM ubuntu:20.04
 
@@ -64,9 +65,6 @@ CMD ["apachectl", "-D", "FOREGROUND"]
 
 alpine linux
 nginx -s reload -c /etc/nginx/nginx.conf
-
-
-
 
 
 Docker-compose
