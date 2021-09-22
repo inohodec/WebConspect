@@ -1,0 +1,9 @@
+service nginx status - показывает статус nginx в системе
+service nginx status - стартует nginx
+service nginx stop   - останавливает nginx
+service nginx reload - перезапускает nginx
+
+/etc/nginx/nginx.conf       - основной конфигурационный файл
+/etc/nginx/sites-available  - папка в которой можно создать кастомный(ные) конфигурационные файлы
+/etc/nginx/sites-enabled    - что бы активировать хост находящийся в /etc/nginx/sites-available сюда помещается ссылка на него
+
