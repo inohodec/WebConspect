@@ -1,9 +1,13 @@
 service nginx status - показывает статус nginx в системе
-service nginx status - стартует nginx
+service nginx start - стартует nginx
 service nginx stop   - останавливает nginx
-service nginx reload - перезапускает nginx
+service nginx reload - перезапускает nginx(перезагрузка конфигурационного файла)
+
+По умолчанию, конфигурационный файл называется nginx.conf и расположен в каталоге /usr/local/nginx/conf, /etc/nginx или /usr/local/etc/nginx.
 
 /etc/nginx/nginx.conf       - основной конфигурационный файл
-/etc/nginx/sites-available  - папка в которой можно создать кастомный(ные) конфигурационные файлы
+/etc/nginx/sites-available  - папка в которой можно создать виртуальные хосты тк в nginx.conf есть директива include /etc/nginx/sites-enabled/*
 /etc/nginx/sites-enabled    - что бы активировать хост находящийся в /etc/nginx/sites-available сюда помещается ссылка на него
 
+не забываем, что апач и нжинкс работают по умолчанию на одном и том же 80м порту
+sudo systemctl disable --now
