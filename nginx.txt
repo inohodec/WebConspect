@@ -6,8 +6,47 @@ service nginx reload - перезапускает nginx(перезагрузка
 По умолчанию, конфигурационный файл называется nginx.conf и расположен в каталоге /usr/local/nginx/conf, /etc/nginx или /usr/local/etc/nginx.
 
 /etc/nginx/nginx.conf       - основной конфигурационный файл
+
+в файлах для поддоменов должны быть только настройки для конкретных сайтов
+т.е. должны быть только директивы server {...}, т.к. по сути эти файлы инклудятся в основной конф файл nginx.conf(конечно если не удалить строку отвечающую за это)
 /etc/nginx/sites-available  - папка в которой можно создать виртуальные хосты тк в nginx.conf есть директива include /etc/nginx/sites-enabled/*
 /etc/nginx/sites-enabled    - что бы активировать хост находящийся в /etc/nginx/sites-available сюда помещается ссылка на него
 
 не забываем, что апач и нжинкс работают по умолчанию на одном и том же 80м порту
 sudo systemctl disable --now
+
+
+events {
+    # some settings; 
+}
+
+http {
+    include /etc/nginx/sites-enabled/*;         # подключаем файлы виртуальных хостов
+    include /etc/nginx/mime.types;              # подключаем mime types (jpg, jpeg, png etc.)
+
+    gzip on;                                    # включаем сжатие
+
+    server {
+        listen 8080;
+        server_name max.loc www.max.loc;
+        root /var/www/nginx_learning;
+        index index.php index.html;
+        
+        location ~ \.php$ {
+			try_files $uri = 404;
+			include fastcgi_params;
+			fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
+			fastcgi_index index.php;                                            # Задаёт имя файла, который при создании переменной $fastcgi_script_name 
+                                                                                # будет добавляться после URI, если URI заканчивается слэшом.
+			
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;   # создаёт параметр SCRIPT_FILENAME для передачи FastCGI-серверу
+                                                                                # который будет равен $document_root$fastcgi_script_name;
+                                                                                # $document_root = root(/var/www/nginx_learning) в server
+                                                                                # $fastcgi_script_name равна URI + index.php т.к. мы
+                                                                                # указывали fastcgi_index index.php;
+            
+            fastcgi_param OSTEPAN ostepan;   # чисто для примера, создаёт параметр OSTEPAN, который будет передаваться FastCGI-серверу. 
+            # В качестве значения можно использовать текст, переменные и их комбинации. Т.е в php скрипте появится $_SERVER['OSTEPAN'] = 'ostepan';
+		}
+    }
+}
