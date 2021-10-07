@@ -125,7 +125,7 @@ composer update phploc/phploc
                     |   |__Translator.php
                     |   |__Viewer.php
                     |   |__Loggers
-                                  |__AccessLogger.php
+                                  |__Access.php
 
         ------index.php-----------------
         $filePath = __DIR__ . "/vendor/autoload.php";
