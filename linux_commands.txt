@@ -73,6 +73,7 @@ o - другие пользователи.
 - - удалит права (знак минус)
 
 chmod ugo+rwx test5
+chmod ug+rwx,o+rx test5
 chmod o-w test5     уберет у остальных пользователей право на запись
 
 r - 4 (read)
