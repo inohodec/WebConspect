@@ -2,18 +2,32 @@
 
 добавляем в php.ini или другой конфигурационный файл
 
+по умолчанию для 2ой версии исппользуется 9000 порт, а для 3ей 9003
+узнать инфу по xdebug можно вставив вывод команды php -i по адресу
+https://xdebug.org/wizard
+
+так же важно понимать, что при отладке через вэбсервер nginx и браузер записи добавляются в /etc/php/7.4/fpm/php.ini
+или другой конф.файл подгруженный php-fpm, для командной сроки это будет /etc/php/7.4/cli/php.ini, где 7.4 - версия php
+
+
 xdebug версии 3+
 
 [xdebug]
-zend_extension=xdebug.so
+zend_extension=/usr/lib/php/20190902/xdebug.so                    ;Или путь к файлу xdebug.so
 xdebug.mode = debug
 xdebug.start_with_request = yes
-xdebug.client_port = 10000
+
 
 --------------------------------------------------------------------
 xdebug версии 2+
 
-[xdebug]
+[xdebug]                                    ;обновленный вариант
+zend_extension=xdebug.so                    ;Или путь к файлу xdebug.so
+xdebug.remote_enable = 1
+xdebug.remote_autostart = 1
+xdebug.remote_port = 9000
+
+[xdebug]                                    ;старый вариант
 zend_extension=xdebug.so                    ;Или путь к файлу xdebug.so
 xdebug.remote_autostart=1
 xdebug.remote_enable=1
