@@ -2,6 +2,7 @@ service nginx status - показывает статус nginx в системе
 service nginx start - стартует nginx
 service nginx stop   - останавливает nginx
 service nginx reload - перезапускает nginx(перезагрузка конфигурационного файла)
+sudo nginx -t       - проверить правильность настроек
 
 По умолчанию, конфигурационный файл называется nginx.conf и расположен в каталоге /usr/local/nginx/conf, /etc/nginx или /usr/local/etc/nginx.
 
@@ -13,8 +14,19 @@ service nginx reload - перезапускает nginx(перезагрузка
 /etc/nginx/sites-enabled    - что бы активировать хост находящийся в /etc/nginx/sites-available сюда помещается ссылка на него
 
 не забываем, что апач и нжинкс работают по умолчанию на одном и том же 80м порту
-sudo systemctl disable --now
+sudo systemctl [service name] disable --now
 
+
+location /img {return 200;}     - контекст сработает на /img/img.jpg /image/img.jpg, т.е. начинается на img(совпадение префиксов)
+location = /img {return 200;}   - контекст сработает на /img, но не на /img/img.jpg, т.е. ся на img(строгое совпадение префиксов)
+location ~ /img/+\.png          - regexp чувствительно к регистру
+location *~ /img/+\.png         - regexp не чувствительно к регистру
+
+приоритет выполнения в порядке важности 
+location = /something       - полное совпадение
+location ^~ /something      - регвыражение с префиксом преимущества
+location ~ | *~ /something  - регвыражение
+location /something         - простое совпадение префикса
 
 events {
     # some settings; 
