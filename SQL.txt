@@ -45,7 +45,7 @@ SELECT * FROM customer WHERE city LIKE "____m";  /*выберет слово и�
 /*================================ DELETE, UPDATE, SET ===================================*/
 
 /*DELETE - унмчтожает только целую строку, а UPDATE отдельно колонки*/
-DELETE FROM your table; 		# удаляет все записи из таблицы
+DELETE FROM your_table; 		# удаляет все записи из таблицы
 
 /*UPDATE  может изменять одну запись или несколько записей в зависимости от условия WHERE*/
 UPDATE customer SET fed_id='666-66-6666' WHERE cust_id=2;
@@ -94,7 +94,7 @@ ALTER TABLE table_name ADD COLUMN id INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIM
 # вместо FIRST можно использовать: LAST, AFTER column_name, BEFORE column_name, SECOND, FIFTH и т.д.
 ALTER TABLE table_name ADD COLUMN phone_number VARCHAR(10) AFTER id;
 
-# CHANGE - изменение имени и типа данных столбцов(vj;yj gthtxbckznm xthtp pfgzne.)
+# CHANGE - изменение имени и(или) типа данных столбцов(можно перечислять через запятую)
 ALTER TABLE branch CHANGE name new_name VARCHAR(40);
 ALTER TABLE branch CHANGE COLUMN name new_name VARCHAR(40),
 				   CHANGE COLUMN id new_id INT;

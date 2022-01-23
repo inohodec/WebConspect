@@ -1,4 +1,6 @@
 /usr/bin/php7.4                         -- интерпретатор php - версия может отличаться
+/etc/php/7.4/fpm/conf.d/xx_name.ini     -- для php-fpm
+/etc/php/7.4/cli/conf.d/xx_name.ini     -- для php из командной строки
 
 php -v показывает версию включая xdebug
 
@@ -26,5 +28,5 @@ sudo systemctl reload php7.4-fpm.service -- перезагрузка php
 настройки xdebug, должны быть указаны либо в 
 /etc/php/7.4/mods-available/xdebug.ini
 либо в
-php.ini или /etc/php/7.4/cli/conf.d/xx_name.ini
+php.ini или /etc/php/7.4/fpm/conf.d/xx_name.ini
 иначе они могут конфликтовать

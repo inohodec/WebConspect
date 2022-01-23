@@ -19,4 +19,5 @@ $users = [
     ];
 
 $cmp = fn($a, $b) => $a['age'] <=> $b['age'];
+
 usort($users, $cmp);
