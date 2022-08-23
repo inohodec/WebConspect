@@ -1,0 +1,23 @@
+В лине, часто php.ini для CLI и вэб сервера разные, поэтому стоит проверить точно, какой файл используеться
+
+Проверяем используемый ПХП файл phpinfo(): 
+Loaded Configuration File	        /etc/php/8.1/apache2/php.ini
+
+Суть в том что php --ini может ввести в заблуждение:
+Loaded Configuration File:          /etc/php/8.1/cli/php.ini
+
+далее в нужный файл закидываем
+
+[xdebug 3+]
+zend_extension="<path to xdebug extension>"
+xdebug.mode=debug
+xdebug.client_host=127.0.0.1
+xdebug.client_port="<the port (9003 by default) to which Xdebug connects>"
+
+ИЛИ
+
+[xdebug]
+zend_extension="<path to xdebug extension>"
+xdebug.remote_enable=1
+xdebug.remote_host=127.0.0.1
+xdebug.remote_port="<the port (9000 by default) to which Xdebug connects>"
