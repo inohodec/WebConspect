@@ -1,0 +1,235 @@
+
+//============================================================================================
+//================================    Math Operators   =======================================
+//============================================================================================
+
+//********* Strings *********
+/*
+** Does'nt matter where string is when we have only 2 operands
+*/
+alert( '1' + 2 ); 		// "12"
+alert( 2 + '1' ); 		// "21"
+
+/*
+Здесь операторы работают один за другим. Первый + складывает два числа и
+возвращает 4 , затем следующий + объединяет результат со строкой, производя действие
+4 + '1' = 41 .
+*/
+alert(2 + 2 + '1' ); 	// будет "41", а не "221"
+
+//------------------------------------- Unary operators ---------------------------------------- 
+//----------------------------------------------------------------------------------------------
+/*
+*chenge number sign	
+*/
+let num1 = 15;
+alert(-num1);			//-15
+
+/**
+ * if num2 is string "+" try to convert variable to number, if it's number dosen't do anything
+ * */
+let num2 = "15";
+typeof(num2); 			//"string"
+typeof(+num2);			//"number"
+
+
+//------------------------------------ Operators of equality -----------------------------------
+//----------------------------------------------------------------------------------------------
+
+/**
+ * ---- using ">", "<", ">=", "<=":
+ * ---- operands will be converted to numbers(if it's possible)
+ * ---- null = 0, undefined = NaN, true = 1, false = 0, "014" = 14, "014z" is not convertable 
+ * ----
+ * ---- using "==": 
+ * ---- try to converts strings to numbers
+ * ---- ATTENTION "==" doesn't do any convertations with "null, undefined" !!!
+ * */
+
+20 === "20"; 			//false - strict equality
+20 == "20";				//true
+20 > "10";				//true
+20 >= "20"				//true
+
+undefined == null;		//the same but not equal to any others values
+undefined === null;		//false, because of strict equality
+
+alert( null > 0 ); 		// (1) false
+alert( null == 0 ); 	// (2) false
+alert( null >= 0 ); 	// (3) true
+
+
+//--------------------------------- Operators of logic equality --------------------------------
+//----------------------------------------------------------------------------------------------
+
+/**
+ * ---- using "||" Attention !!! converts operands into BOOL but returns original values
+ * ---- after that cheks 1st value if its true it stops and and returns original value or operator takes 2nd value it so on, 
+ * ---- if there isn't any true values
+ * ---- operator takes the last one: result = value3 
+ * */
+
+alert( 1 || 0 );                    // 1
+alert( true || 'no matter what' );  // true
+alert( null || 1 );                 // 1 (первое истинное значение)
+alert( null || 0 || 1 );            // 1 (первое истинное значение)
+alert( undefined || null || 0 );    // 0 (поскольку все ложно, возвращается последнее значение)
+
+/**
+ * ---- using "&&" has bigger priority than "||" and start first. Attention !!! converts operands into BOOL but returns original values
+ * ---- cheks 1st value if its false it stops and returns original value or operator takes 2nd value and it so on, if there isn't any false values
+ * ---- operator takes the last one: result = value3 
+ * */
+alert("1" || true || 5 );		//alert 5, there is no false values and returns the last one
+
+let x = 1;
+(x > 0) && alert( 'Greater than zero!' );
+
+/**
+ * ---- using "!" has THE HIGGEST PRIORITY !!!
+ * ---- in first converts values to bool than returns opposite value(true or false)
+ * */
+alert( !true );                     // false
+alert( !0 );                        // true
+
+
+/**
+ * ---- using "??"
+ * ---- cheks on null/undefined
+ * ---- 
+ * */
+
+let user;                   // is undefined
+alert(user ?? "Аноним");    // "Аноним" the same as (user !== null && user !== undefined) ? user : "Аноним"
+
+let firstName = null;
+let lastName = null;
+let nickName = "Суперкодер";
+alert(firstName ?? lastName ?? nickName ?? "Аноним");   // показывает первое определённое значение: Суперкодер
+alert(firstName || lastName || nickName || "Аноним");   // is the same as ?? above. But "||" doesn't recognize: false, 0, "", null, undefined
+
+/**
+ * ---- Оператор ?? имеет довольно низкий приоритет: 5 , согласно таблице на MDN  . Таким образом, оператор ?? вычисляется до = и ? , но после большинства других операций,
+ * ---- таких как + , * . Из этого следует, что если нужно выбрать значение при помощи оператора ?? вместе сдругими операторами в выражении, следует добавить круглые скобки:
+ * ---- Иначе, если опустить скобки, то оператор * выполнится первым, так как у него приоритетвыше, чем у ?? , а это приведёт к неправильным результатам.
+* */
+
+let height = null;
+let width = null;
+let area = (height ?? 100) * (width ?? 50);             // важно: используйте круглые скобки
+alert(area); // 5000 
+
+/**
+ * ---- По соображениям безопасности JavaScript запрещает использование оператора ?? вместе с && и || , если только приоритет явно не указан в круглых скобках.
+ * ---- Выполнение следующего кода приведёт к синтаксической ошибке:
+ * */
+ let x = 1 && 2 ?? 3; // Синтаксическая ошибка
+
+
+//------------------------------ Types convertatation ------------------------------------------
+//----------------------------------------------------------------------------------------------
+
+//strings and numbers 
+//
+// undefined       => NaN
+// null            => 0
+// true / false    => 1 / 0
+// string          => Пробельные символы по краям обрезаются. Далее, если остаётся пустая строка, то получаем 0 ,
+//                    иначе из непустой строки «считывается» число. При ошибке результат NaN .
+
+//logic
+//
+//0 , null , undefined , NaN , ""   =>  false
+//Attention: " "                    =>  true
+
+/**
+ * ---- When we use "if (statement) {}" it converts into BOOL type
+ * ---- 0 , "" , null , undefined , NaN - converts in false and have name "falsy"
+ * ---- other values will transform in true and have name "truthy" 
+ * */
+let val = false;
+if ("0") val = true;    //val = true; because "0" is non empty string  
+
+
+//==================================================================================================
+//======================================== Functions ===============================================
+//==================================================================================================
+
+
+//------------------------------------Declare Functions --------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+//---- if function uses return without statement it anyway return - undefined
+function function_name(argument) {
+    return;                                     
+} 
+let result = function_name();                               //returns undefined                  
+
+function function_name(argument) {
+    return                                                  //интерпретатор поставит ";"
+        argument + "lorem  ...";                            //returns undefined! return and value havr to be at same line;                                    
+} 
+
+function function_name(argument) {
+    return (                                                  
+        argument + "lorem  ..." +
+        "lorem isum");                                       //returns undefined! return and value havr to be at same line;                                    
+}
+
+//----------------------------------- Function Expression --------------------------------------------
+//----------------------------------------------------------------------------------------------------
+
+//Attention!!! Can use only after declarate variable whith fuunct val unlike plain function
+let sayHi = function () {
+    alert('Hi there!');
+};                                                          // don't forget ";" at the end
+sayHi();
+
+//---------------------------------------------------------------------------------------------------
+function sayHi() {                                          // (1) создаём
+    alert( "Привет" );
+}
+let func = sayHi;                                           // (2) копируем
+func();                                                     // Привет // (3) вызываем копию (работает)!
+sayHi();                                                    // Привет // прежняя тоже работает (почему бы нет)
+
+//------------------------------------ Callback function ---------------------------------------------
+
+
+
+function sayYes () {alert("YES")};
+function sayNo () {alert("NO")};
+
+function typeAswer() {
+    if (confirm("choose 'ok' or 'no'")) sayYes()
+    else sayNo();
+}
+
+//------------------------------------- Arrow functions -----------------------------------------------
+
+let sum = function(a, b) {
+    return a + b;
+};
+
+// or arrov function
+
+let sum = (a, b) => a * b;
+let sum = (a, b) => {
+    let mult = a * b;
+    mult += mult;
+    return mult;                                                //in multiline array function "retirn" is necessary
+};
+
+// if we have 1 we can write function shorter
+
+let sum = a => 10 ** a;
+
+//whitout any arguments use empty parentheses "()"
+
+let sum = () => alert(10 * 10); 
+
+let age = prompt("Сколько Вам лет?", 18);
+let welcome = (age < 18) ?
+    () => alert('Привет') :
+    () => alert("Здравствуйте!");
+welcome(); // теперь всё в порядке
