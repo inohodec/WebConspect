@@ -217,11 +217,11 @@ ECHO %1 %2
 REM IF [NOT] var1 == var2 [ELSE], EQU — =, NEQ — !=, LSS — <, LEQ — <=, GTR — >,GEQ — >=
 REM сравнивать с пустой строкой нельзя если переменной нет, она будет заменена на "",
 REM кавычки для литеральных строк не требуються, для избежания ошибок сравнения с пустой строкой добавляют любой символ
-REM -%1==-C:\some_folder is exist
+REM -%1==-C:\some_folder is exist, ключ /I - без учета регистра 
 IF -%1==-HelloBro ECHO %1 "==" HelloBro
 PAUSE
 
-IF -%1==-HelloBro (
+IF /I -%1==-HelloBro (
     ECHO %1 "==" HelloBro
 ) ELSE (
    ECHO %1 "<>" HelloBro
@@ -239,3 +239,50 @@ IF -%1==-HelloBro (
     ECHO %1 "<>" HelloBro 
     PAUSE
 )
+
+REM (NOT) EXIST - Checks if file exists
+IF NOT EXIST %1 (
+    ECHO file doesn't exist
+    GOTO :EOF
+    )
+ECHO File exist
+GOTO :EOF
+
+REM Проверка переменной среды делаеться через DEFINED
+IF DEFINED MyVar GOTO :label
+
+REM Проверка завершения команды, для сравнения можно использовать операторы
+XCOPY my.txt C:\>NUL
+IF ERRORLEVEL 1 GOTO ErrOccured
+ECHO file was copied SUCCESSFULL
+GOTO EOF
+:ErrOccured
+ECHO There was some error with file copying
+
+************* Циклы ***************************У
+
+REM FOR %%i IN(scope) DO command [parameters]   ВАЖНО - %%i вместо "i" любая ОДНА буква!
+REM > one >two >three
+FOR %%i IN (one,two,three) DO ECHO %%i
+REM > one,two  >three
+FOR %%i IN ("one,two",three) DO ECHO %%i
+
+REM FOR [/R recursing output directory] %%i , /D - current directory's directories
+REM FOR [/L num cycle] FOR %%i IN (start,step,end) DO
+for /L %%f IN (1,1,5) DO CALL:output %%f
+GOTO EOF
+:output
+set /A m=10*%1
+ECHO 10*%1=%m%
+
+REM Обработка файлов построчно, EOL="любой символ комментрария", пропустит эти строки
+REM TOKENS=2,4,* числа значат номера найденых подстрок без пробелов по краям, которые будут взяты
+REM * значит остаток строки, если одна звездочка, то вся строка
+REM DELIMS=,~ символ/лы без пробела, которые будут заменены на пробел
+REM выведет 2 и четвертую подстроку, а так же остаток строки и заменит все * и ~
+REM пробелы. %%a - мы объявили в цикле, остальные добавляються автоматом исходя
+REM из TOKENS=2,4,* (будут добавлены 2 переменных %%a уже есть), переменные идут последовательно 1 за 2 %%b,%%c,%%d и т.д.
+FOR /F "EOL=- TOKENS=2,4,* DELIMS=,~" %%a IN (file.txt) DO ECHO %%a %%b %%c
+
+REM Возможна и подстановка синтаксических конструкций для работы с файлами
+FOR %%a IN (*.txt) DO ECHO ECHO %~Fa
